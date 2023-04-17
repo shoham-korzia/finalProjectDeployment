@@ -143,7 +143,7 @@ console.log(pokemonArr)
       <div className="cards" >
         {filteredData.length>0 ? filteredData.map((pokemon) => (
           <div key={pokemon.id} className="card">
-            <h3 className="title">{pokemon.name}</h3> 
+            <h3 className="title">{pokemon.name}                   #{pokemon.id}</h3> 
             <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`} alt={pokemon.name} />
             <h5 className="type-name">{pokemon.types[0].type.name}</h5>
             <ul>
@@ -151,7 +151,6 @@ console.log(pokemonArr)
             <li className="stats">{pokemon.stats[0].stat.name}: {pokemon.stats[0].base_stat}</li>
             </ul>
             <button className="btn btn-primary" onClick={() => addPokemon(JSON.parse(localStorage.getItem('user')).id,pokemon.name,pokemon.url)}>add to my index</button>
-            <p className="id">#{pokemon.id}</p>
           </div>
         )) : <CircularProgress />}
       </div>

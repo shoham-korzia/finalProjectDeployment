@@ -6,7 +6,7 @@ import Home from "./Home";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import './Home.css';
+import './Login.css';
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
@@ -46,30 +46,24 @@ function Login() {
   };
 
   return (
-    <Box className="box">
-      <h1>POKEDEX</h1>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          margin="normal"
-        />
-        <TextField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          margin="normal"
-        />
-        <Button variant="contained" type="submit" >
+    <div className="home-container">
+  <h1 className="home-title">POKEDEX</h1>
+  <form className="home-form" onSubmit={handleSubmit}>
+    <input onChange={(event) => setUsername(event.target.value)} className="home-input" type="text" placeholder="Username" />
+
+    <input onChange={(event) => setPassword(event.target.value)} className="home-input" type="password" placeholder="Password" />
+
+    <div className="home-buttons">
+    <Button variant="contained" type="submit" >
           Login
         </Button>
-      </form>
-      {message && message }
-    </Box>
+    </div>
+  </form>
+
+  {message && message }
+</div>
+
   );
 }
 
 export default Login;
-

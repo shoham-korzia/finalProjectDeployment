@@ -44,24 +44,25 @@ console.log(response)
   return (
     
     <div className="home-container">
-  
-      <h1 className="home-title">POKEDEX</h1>
-      <div className="home-form">
-        <form>
-          <input onChange={logUser} className="home-input" type="text" placeholder="Username" />
-          <input onChange={logPassword}className="home-input" type="password" placeholder="Password" />
-          <br/><Link to="/Login">
-            <button onClick={register} className="home-button">Register</button>
-          </Link><br/>
-          <Link to="/Login">
-            <button className="home-button">Go to Login</button>
-          </Link>
-          
-        </form>
-        {message && <p>{message}</p>}
-      </div>
+  <h1 className="home-title">POKEDEX</h1>
+  <form className="home-form">
+    <input onChange={logUser} className="home-input" type="text" placeholder="Username" />
+
+    <input onChange={logPassword} className="home-input" type="password" placeholder="Password" />
+
+    <div className="home-buttons">
+    <Link to="/Login">
+<button onClick={register} className="home-button">Register</button>
+</Link> 
     </div>
+  </form>
+
+  {message && <p className="home-message">{message}</p>}
+</div>
+
   );
 }
 
 export default Home;
+
+ 

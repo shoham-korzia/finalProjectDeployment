@@ -1,66 +1,67 @@
 import * as React from 'react';
 
 function Result(props) {
+  const [pokemons, setPokemons] = React.useState([]);
   
-  const [pokemons,setPokemons]= React.useState([])
-  // const selectedPokemon = JSON.parse(localStorage.getItem('selectedPokemon') || '[]');
-
-  // const removePokemon = (id) => {
-  //   // id.preventDefault();
-  //   const updatedPokemon = selectedPokemon.filter((pokemon) => pokemon.id !== id);
-  //   localStorage.setItem('selectedPokemon', JSON.stringify(updatedPokemon));
-  //   window.location.reload()};
-  React.useEffect(()=>{
-    getPokemonsByUserId()
-  },[])
-  async function getPokemonsByUserId (){
-    const response= await fetch("/getPokemonsByUserId",{
-      method:"post",
-      headers:{"content-type":"application/json"},
-      body:JSON.stringify({userId:JSON.parse(localStorage.getItem('user')).id})
-    })
+  React.useEffect(() => {
+    getPokemonsByUserId();
+  }, []);
+  
+  async function getPokemonsByUserId() {
+    const response = await fetch("/getPokemonsByUserId", {
+      method: "post",
+      headers: {"content-type": "application/json"},
+      body: JSON.stringify({userId: JSON.parse(localStorage.getItem('user')).id})
+    });
     
-    const pokemons=await response.json();
+    const pokemons = await response.json();
     console.log(pokemons)
-    const pokemonArr=[]
-    for(let pokemon of pokemons){
+    const pokemonArr = [];
+    for (let pokemon of pokemons) {
       console.log(pokemon.pokemonUrl)
-      const test =await fetch(pokemon.pokemonUrl)
+      const test = await fetch(pokemon.pokemonUrl);
       console.log(test)
-      const test2=await test.json()
+      const test2 = await test.json();
       console.log(test2)
-      const fullInfo={...pokemon,...test2}
-      pokemonArr.push(fullInfo)
-    
+      const fullInfo = {...pokemon, ...test2};
+      pokemonArr.push(fullInfo);
     }
     console.log(pokemonArr)
-    setPokemons(pokemonArr)
+    setPokemons(pokemonArr);
   }
+  
   async function deletePokemonById(id) {
     try {
-      const response = await fetch("/removePokemonsByUserId", {
-        method: 'DELETE',
+      const response = await fetch(`/removePokemonById/${id}`, {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
       });
-      if (response.ok) {
-        const updatedPokemons = pokemons.filter((pokemon) => pokemon.id !== id);
-        setPokemons(updatedPokemons);
-      } else {
-        console.error('Failed to delete Pokemon');
-      }
-    } catch (error) {
-      console.error('Error deleting Pokemon', error);
+      const data = await response.json();
+      console.log(data);
+    } catch (e) {
+      console.log("Failed to delete Pokemon");
+      console.log(e);
     }
   }
   
-  
+  const handleDelete = async (id) => {
+    try {
+      await deletePokemonById(id);
+      setPokemons(pokemons.filter((p) => p.id !== id)); // update pokemons state
+      
+      const selectedPokemon = JSON.parse(localStorage.getItem('selectedPokemon') || '[]');
+      const updatedPokemon = selectedPokemon.filter((pokemon) => pokemon.id !== id);
+      localStorage.setItem('selectedPokemon', JSON.stringify(updatedPokemon));
+    } catch (error) {
+      console.error("Failed to delete Pokemon", error);
+    }
+  };
+    
   return (
     <div className="cards">
-      { pokemons.length>0 && pokemons.map((pokemon) => (
-       
-       <div key={pokemon.id} className="card">
-          <button className="remove-btn" onClick={() => deletePokemonById(pokemon.id)}>
-
-
+      { pokemons.length > 0 && pokemons.map((pokemon) => (
+        <div key={pokemon.id} className="card">
+          <button className="remove-btn" onClick={() => handleDelete(pokemon.id)}>
             <span className="remove-icon">X</span>
           </button>
           <h3 className="title">{pokemon.name}</h3> 
@@ -78,3 +79,4 @@ function Result(props) {
 }
 
 export default Result;
+
